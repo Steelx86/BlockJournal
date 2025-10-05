@@ -1,9 +1,15 @@
 use clap::{Parser, Subcommand};
-use crate::models::Blockchain;
-use crate::storage::Storage;
 
+#[derive(Parser)]
+#[command(name="blockjournal")]
+#[command(about="A journal blockchain CLI application")]
+#[command(version="1.0")]
 pub struct Cli {
+    #[command(subcommand)]
     pub command: Commands,
 }
 
-pub enum 
+#[derive(Subcommand)]
+pub enum Commands {
+
+}

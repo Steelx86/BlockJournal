@@ -23,7 +23,6 @@ pub struct Blockchain {
     pub chain: Vec<Block>,
 }
 
-
 impl JournalEntry {
     pub fn new(content: String, location: String) -> Self {
         let timestamp = Utc::now();
@@ -66,10 +65,7 @@ impl Block {
 
 impl Blockchain {
     pub fn new() -> Self {
-        let genesis_entry = JournalEntry::new(
-            "Genesis Block".to_string(),
-            "N/A".to_string(),
-        );
+        let genesis_entry = JournalEntry::new("Genesis Block".to_string(), "N/A".to_string());
 
         let genesis_block = Block::new(0, genesis_entry, "0".to_string());
 
@@ -87,5 +83,54 @@ impl Blockchain {
 
         self.chain.push(new_block);
         self.chain.last().unwrap()
+    }
+
+    pub fn is_valid(&self) -> bool {
+        for i in 1..self.chain.len() {
+            let current_block = &self.chain[i];
+            let previous_block = &self.chain[i - 1];
+
+            if current_block.hash != current_block.calculate_hash() {
+                return false;
+            }
+
+            if current_block.previous_hash != previous_block.hash {
+                return false;
+            }
+        }
+        true
+    }
+
+    pub fn len(&self) -> usize {
+        self.chain.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.chain.is_empty()
+    }
+
+    pub fn replace_chain(&mut self, new_chain: Vec<Block>) -> bool {
+        if new_chain.len() > self.chain.len() && Self::is_chain_valid(&new_chain) {
+            self.chain = new_chain;
+            true
+        } else {
+            false
+        }
+    }
+
+    fn is_chain_valid(chain: &Vec<Block>) -> bool {
+        for i in 1..chain.len() {
+            let current_block = &chain[i];
+            let previous_block = &chain[i - 1];
+
+            if current_block.hash != current_block.calculate_hash() {
+                return false;
+            }
+
+            if current_block.previous_hash != previous_block.hash {
+                return false;
+            }
+        }
+        true
     }
 }

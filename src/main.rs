@@ -1,5 +1,7 @@
 mod models;
 mod storage;
+mod network;
+mod cli;
 
 use storage::Storage;
 

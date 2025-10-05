@@ -2,8 +2,6 @@ use crate::models::Blockchain;
 use serde_json;
 use std::fs;
 use std::path::Path;
-use ring::rand::SecureRandom;
-use ring::rand::SystemRandom;
 
 pub struct Storage {
     pub file_path: String,
